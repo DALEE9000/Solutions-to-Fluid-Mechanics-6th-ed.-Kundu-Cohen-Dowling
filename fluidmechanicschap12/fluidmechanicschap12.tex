@@ -1,0 +1,257 @@
+\documentclass[a4paper]{article}
+
+\def\nbook {Fluid Mechanics}
+\def\nbookshort {FM}
+
+% Shared preamble. The fallback lets the document build whether the working
+% directory is its own folder or the project root.
+\IfFileExists{headerfluidmechanics.tex}{\input{headerfluidmechanics}}{\input{../headerfluidmechanics}}
+
+\begin{document}
+\maketitle
+
+\newpage
+\tableofcontents
+
+\newpage
+\section{12 - Turbulence}
+
+% QUESTION 1
+\qs{12.1}{Determine general relationships for the second, third, and fourth central moments (variance \(= \sigma^{2}\), skewness \(= S\), and kurtosis \(= K\)) of the random variable \(u\) in terms of its first four ordinary moments: \(\overline{u}\), \(\overline{u^{2}}\), \(\overline{u^{3}}\), and \(\overline{u^{4}}\).}
+
+By definition, the \(m\)-th central moment is
+\[
+	\overline{\!\left( u - \overline{u} \right)^{m}} = \frac{1}{N} \sum_{n=1}^{N} \!\left( u \!\left( \bm{x}, t : n \right) - \overline{u \!\left( \bm{x}, t \right) } \right)^{m}
+\]
+Following the rules of operations involving ensemble averaging, we can derive (more succintly with the binomial expansion\footnote{For numbers \(a\), \(b\): \( (a + b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^k \)}):
+
+\begin{alignat*}{2}
+	\sigma^{2} & = \overline{\!\left(u - \overline{u} \right)^{2}} \\
+	     & = \overline{u^{2} - 2u \overline{u} + \overline{u}^{2} } \\
+	     & = \overline{u^{2}} - 2 \overline{u}^{2} + \overline{u}^{2}  \\
+	     & = \boxed{ \overline{u^{2}} - \overline{u}^{2} } \\
+	   S & = \overline{\!\left( u - \overline{u} \right)^{3} }  \\
+	     & = \overline{u^{3} - 3u^{2}\overline{u} + 3u \overline{u}^{2} - \overline{u}^{3}} \\
+	     & = \overline{u^{3}} - 3 \overline{u^{2}} \overline{u} + 3 \overline{u}^{3} - \overline{u}^{3} \\
+	     & = \overline{u^{3}} - 3 \overline{u} \!\left( \overline{u^{2}} - \overline{u}^{2} \right) - \overline{u}^{3} \\
+	     & = \boxed{ \overline{u^{3}} - 3 \overline{u} \sigma^{2} - \overline{u}^{3} } \\
+	   K & = \overline{\!\left( u - \overline{u} \right)^{4}} \\
+	     & = \overline{\!\left( u^{2} - 2u \overline{u} + \overline{u}^{2} \right) \!\left( u^{2} - 2u \overline{u} + \overline{u}^{2} \right) } \\
+	     & = \overline{u^{4} - 4u^{3} \overline{u} + 6u^{2} \overline{u}^{2} - 4u \overline{u}^{3} + \overline{u}^{4}} \\
+	     & = \boxed{ \overline{u^{4}} - 4 \overline{u^{3}} \overline{u} + 6 \overline{u^{2}} \overline{u}^{2} - 3 \overline{u}^{4} } \\
+\end{alignat*}
+
+\vspace{12pt}
+
+% QUESTION 2
+\qs{12.2}{Calculate the mean, mean square, variance, and \textit{rms} value (or standard deviation) of the periodic time series \(u \!\left( t \right) = \overline{U} + U_{0} \cos\left( \omega t \right)\), where \(\overline{U}\), \(U_{0}\), and \(\omega\) are positive real constants.}
+
+In general, the time average of \(u^{m} \!\left( \bm{x}, t \right) \) is given by:
+\[
+	\overline{u^{m} \!\left( \bm{x} \right)} = \frac{1}{\Delta t} \int^{t + \Delta t / 2}_{t - \Delta t / 2} u^{m}\!\left( \bm{x}, t \right)  \, dt 
+\]
+And so we calculate:
+
+\textbf{Mean:}
+
+\begin{alignat*}{2}
+	\overline{u} & = \frac{1}{\Delta t} \int^{t + \Delta t / 2}_{t - \Delta / 2} \!\left[ \overline{U} + U_{0} \cos\left( \omega t \right) \right] \, dt  \\
+		     & = \frac{1}{\Delta t} \left\{ \overline{U} \Delta t + \frac{U_{0}}{\omega} \left[
+    \sin\left( \omega \left( t + \frac{\Delta t}{2} \right) \right)
+    - \sin\left( \omega \left( t - \frac{\Delta t}{2} \right) \right) \right] \right\} \\
+    		     & = \frac{1}{\Delta t} \!\left[ \overline{U} \Delta t + \frac{2 U_{0}}{\omega} \cos\left( \omega t \right) \sin\left( \frac{\omega \Delta t}{2} \right) \right] \\
+		     & = \boxed{ \overline{U} + \!\left[ \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right] U_{0} \cos\left( \omega t \right) }
+\end{alignat*}
+
+\textbf{Mean Square:}
+
+\begin{alignat*}{2}
+	\overline{u^{2}} & = \frac{1}{\Delta t} \int^{t + \Delta t / 2}_{t - \Delta t / 2} \!\left[ \overline{U} + U_{0} \cos\left( \omega t \right) \right]^{2} \, dt  \\
+	& = \frac{1}{\Delta t} \int^{t + \Delta t / 2}_{t - \Delta t / 2} \!\left[ \overline{U}^{2} + 2 \overline{U} U_{0} \cos\left( \omega t \right) + U_{0}^{2} \cos^{2}\left( \omega t \right) \right]  \, dt  \\ 
+	& = \frac{1}{\Delta t} \!\left[ \overline{U}^{2} \Delta t + \frac{2 \overline{U} U_{0}}{\omega} \!\left( \sin\left( \omega \!\left( t + \frac{\Delta t}{2} \right)  \right) - \sin\left( \omega \!\left( t - \frac{\Delta t}{2} \right)  \right) \right) \right. \\
+	& \qquad \left. + \frac{U_{0}^{2}}{2} \Delta t + \frac{U_{0}^{2}}{4 \omega} \!\left( \sin\left( 2 \omega \!\left( t + \frac{\Delta t}{2} \right)  \right) - \sin\left( 2 \omega \!\left( t - \frac{\Delta t}{2} \right)  \right) \right)  \right] \\
+	& = \overline{U}^{2} + \frac{U_{0}^{2}}{2} + \frac{2 \overline{U} U_{0}}{\omega \Delta t / 2} \cos\left( \omega t \right) \sin\left( \omega \Delta t / 2 \right) + \frac{U_{0}^{2} / 2}{\omega \Delta t} \cos\left( 2 \omega t \right) \sin\left( \omega \Delta t \right) \\
+	& = \boxed{ \overline{U}^{2} + \frac{U_{0}^{2}}{2} + \!\left[ \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right] 2 \overline{U} U_{0} \cos\left( \omega t \right) + \!\left[ \frac{\sin\left( \omega \Delta t \right)}{\omega \Delta t} \right] \frac{U_{0}^{2}}{2} \cos\left( 2 \omega t \right) } \\
+\end{alignat*}
+
+\textbf{Squared Mean:}
+
+\begin{alignat*}{2}
+	\overline{u}^{2} & = \!\left[ \overline{U} + \!\left[ \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right] U_{0} \cos\left( \omega t \right) \right]^{2} \\
+	 & = \boxed{ \overline{U}^{2} + \!\left[ \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right] 2 \overline{U} U_{0} \cos\left( \omega t \right) + \!\left[ \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right]^{2} U_{0}^{2} \cos^{2}\left( \omega t \right)} \\ 
+\end{alignat*}
+
+\textbf{Variance:}
+
+\begin{alignat*}{2}
+	\sigma^{2} & = \overline{u^{2}} - \overline{u}^{2} \\
+	     & = \frac{U_{0}^{2}}{2} + \!\left[ \frac{\sin\left( \omega \Delta t \right)}{\omega \Delta t} \right] \frac{U_{0}^{2}}{2} \cos\left( 2 \omega t \right) - \!\left[ \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right]^{2} U_{0}^{2} \cos^{2}\left( \omega t \right) \\ 
+	     & = \frac{U_{0}^{2}}{2} + \!\left[ \frac{\sin\left( \omega \Delta t \right)}{\omega \Delta t} \right] \frac{U_{0}^{2}}{2} \!\left( 2 \cos^{2}\left( \omega t \right) - 1 \right) - \!\left[ \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right]^{2} U_{0}^{2} \cos^{2}\left( \omega t \right) \\
+	     & = \boxed{ U_{0}^{2} \!\left[ \cos^{2}\left( \omega t \right) \!\left[ \frac{\sin\left( \omega \Delta t \right)}{\omega \Delta t} - \!\left( \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right)^{2} \right] + \frac{1}{2} - \frac{1}{2} \!\left( \frac{\sin\left( \omega \Delta t \right)}{\omega \Delta t} \right)  \right] }
+\end{alignat*}
+
+\textbf{Root-Mean-Square:}
+
+The authors use the term root-mean-square and standard deviation synonymously here. They are distinct but related:
+\[
+	rms = \boxed{ \sqrt{ \overline{U}^{2} + \frac{U_{0}^{2}}{2} + \!\left[ \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right] 2 \overline{U} U_{0} \cos\left( \omega t \right) + \!\left[ \frac{\sin\left( \omega \Delta t \right)}{\omega \Delta t} \right] \frac{U_{0}^{2}}{2} \cos\left( 2 \omega t \right) } } \\
+\]
+\[
+	\sigma = \boxed{ U_{0} \!\left[ \cos^{2}\left( \omega t \right) \!\left[ \frac{\sin\left( \omega \Delta t \right)}{\omega \Delta t} - \!\left( \frac{\sin\left( \omega \Delta t / 2 \right)}{\omega \Delta t / 2} \right)^{2} \right] + \frac{1}{2} - \frac{1}{2} \!\left( \frac{\sin\left( \omega \Delta t \right)}{\omega \Delta t} \right)  \right]^{1/2} }
+\]
+
+Observe that as \(\Delta t \rightarrow 0\), the bracketed term in the mean goes to unity, recovering the original function -- as expected. The intuition here is that decreasing our time interval does not alter the statistics of \(u \!\left( t \right) \), indicating that it is stationary in time. Moreover, a smaller time interval forces the variance to vanish. We expect this too, as \(u \!\left( t \right) \) will not vary much at all as the neighborhood of points \(t \in \!\left( t - \Delta t / 2, t + \Delta t / 2 \right) \) continues to shrink.
+
+\vspace{12pt}
+
+% QUESTION 3
+\qs{12.3}{Show that the autocorrelation function \(\overline{u \!\left( t \right) u \!\left( t + \tau \right) }\) of a periodic series \(u = U \cos\left( \omega t \right)\) is itself periodic.}
+
+The correlation function is
+\[
+	\overline{u \!\left( t \right) u \!\left( t + \tau \right) } = \frac{1}{\Delta t} \int^{t + \Delta t / 2}_{t - \Delta t / 2} U^{2} \cos\left( \omega t \right) \cos\left( \omega \!\left( t + \tau  \right)  \right) \, dt
+\]
+which evaluates to
+\begin{alignat*}{2}
+	\overline{u \!\left( t \right) u \!\left( t + \tau  \right) } & = \frac{1}{2 \Delta t} \int^{t + \Delta t / 2}_{t - \Delta t / 2} U^{2} \!\left[ \cos\left( \omega \tau  \right) + \cos\left( 2 \omega t + \omega \tau  \right) \right]  \, dt  \\
+	 & = \frac{U^{2}}{2 \Delta t} \!\left[ \Delta t \cos\left( \omega \tau  \right) + \frac{1}{2 \omega} \!\left( \sin\left( 2 \omega \!\left( t + \frac{\Delta t}{2} \right) + \omega \tau  \right) \right. \right. \\
+	 & \qquad \left. \left. - \sin\left( 2 \omega \!\left( t - \frac{\Delta t}{2} \right) + \omega \tau  \right) \right)  \right]  \\ 
+	 & = \frac{U^{2}}{2 \Delta t} \!\left[ \Delta t \cos\left( \omega \tau  \right) + \frac{1}{2 \omega} \!\left( 2 \cos\left( 2 \omega t + \omega t \right) \sin\left( 2 \omega \Delta t \right) \right)  \right] \\
+	 & = U^{2} \!\left[ \frac{1}{2} \cos\left( \omega \tau  \right) + \cos\left( 2 \omega t + \omega \tau  \right) \!\left[ \frac{\sin\left( 2 \omega \Delta t \right)}{2 \omega \Delta t} \right]  \right] 
+\end{alignat*}
+and is periodic -- the only term with \(t\) is the second cosine term.
+
+\vspace{12pt}
+
+% QUESTION 4
+\qs{12.4}{Calculate the zero-lag cross-correlation \(\overline{u \!\left( t \right) v \!\left( t \right) }\) between two periodic series \(u \!\left( t \right) = \cos\left( \omega t \right)\) and \(v \!\left( t \right) = \cos\left( \omega t + \phi  \right)\) by performing at time average over one period \(= 2 \pi / \omega \). For values of \(\phi = 0\), \(\pi / 4\), and \(\pi / 2\), plot the scatter diagrams of \(u\) vs \(v\) at different times, as in Figure 12.8. Note that the plot is a straight line if \(\phi = 0\), an ellipse if \(\phi = \pi / 4\), and a circle of \(\phi = \pi / 2\); the straight line, as well as the axes of the ellipse, are inclined at \(45^{\circ}\) to the \(uv\)-axes. Argue that the straight line signifies a perfect correlation, the ellipse a partial correlation, and the circle a zero correlation.}
+
+The zero-lag cross-correlation is given by
+
+\begin{alignat*}{2}
+	\overline{u \!\left( t \right) v \!\left( t \right) } & = \frac{\omega}{2 \pi } \int^{t + \pi / \omega}_{t - \pi / \omega} \cos\left( \omega t \right) \cos\left( \omega t + \phi  \right) \, dt  \\
+	 & = \frac{\omega}{2 \pi } \int^{t + \pi / \omega}_{t - \pi / \omega} \frac{1}{2} \!\left[ \cos\left( \phi  \right) + \cos\left( 2 \omega t + \phi  \right) \right]  \, dt  \\ 
+	 & = \frac{\omega }{4 \pi } \!\left[ \frac{2 \pi }{\omega } \cos\left( \phi  \right) \right] \\
+	 & = \boxed{\frac{1}{2}\cos\left( \phi  \right)}
+\end{alignat*}
+
+When \(\phi = 0\), \(\pi / 4\), \(\pi / 2\), the cross-correlation is \(1/2\), \(1 / 2\sqrt{2} \), \(0\), respectively. Parametrically plotting \(u \!\left( t \right) \) and \(v \!\left( t \right) \), we see that the values of \(\phi \) correspond to a straight line, ellipse, and circle, respectively:
+
+\begin{center}
+\includegraphics[width=1.0\textwidth]{../chap12-code/chap12ex12.4.eps}
+\end{center}
+
+% QUESTION 5
+\qs{12.5}{If \(u \!\left( t \right) \) is a stationary random signal, show that \(u \!\left( t \right) \) and \(du \!\left( t \right) / dt\) are uncorrelated.}
+
+The cross-correlation is given by:
+\begin{alignat*}{2}
+	\overline{u \!\left( t \right) u' \!\left( t \right) } & = \frac{1}{\Delta t} \int^{t + \Delta t / 2}_{t - \Delta t / 2} u \!\left( t \right) \frac{d u}{d t}  \, dt  \\
+	 & = \frac{1}{\Delta t} \int^{t + \Delta t / 2}_{t - \Delta t / 2} u \!\left( t \right)  \, du  \\ 
+	 & = \frac{1}{2 \Delta t} \!\left( u \!\left( t + \frac{\Delta t}{2} \right)^{2} - u \!\left( t - \frac{\Delta t}{2} \right)^{2} \right) 
+\end{alignat*}
+
+Truthfully, I'm quite confused as to what \(du/dt\) is under the premise that \(u \!\left( t \right) \) is stochastic. My belief is that the time derivative would not exist normally for a stochastic process?
+
+\vspace{12pt}
+
+% QUESTION 6
+\qs{12.6}{Let \(R \!\left( \tau  \right) \) and \(S \!\left( \omega  \right) \) be a Fourier transform pair. Show that \(S \!\left( \omega  \right) \) is real and symmetric if \(R \!\left( \tau  \right) \) is real and symmetric.}
+
+Suppose that \(R \!\left( \tau  \right) \) is real and symmetric. Then \(R \!\left( \tau  \right) = R \!\left( -\tau  \right) \). Then we define \(S \!\left( \omega  \right) \) as
+
+\begin{alignat*}{2}
+	S \!\left( \omega  \right) & = \frac{1}{2 \pi } \int^{+\infty}_{-\infty} R \!\left( \tau  \right) \exp\left( -i \omega \tau  \right) \, d \tau \\
+	& = \frac{1}{2 \pi } \!\left[ \int^{+\infty}_{-\infty} R \!\left( \tau  \right) \cos\left( \omega \tau  \right) \, d \tau - i \int^{+\infty}_{-\infty} R \!\left( \tau  \right) \sin\left( \omega \tau  \right) \, d \tau    \right] 
+\end{alignat*}
+
+By realness of \(R \!\left( \tau  \right) \), the first term must be real. Moreover, by symmetry of \(R \!\left( \tau  \right) \), its integrand is even, and so its integral is also symmetric. Once more by symmetry, the integrand of the second function is odd, and its integral thus vanishes. All that remains is
+\[
+	S \!\left( \omega  \right) = \frac{1}{2 \pi } \int^{+\infty}_{-\infty} R \!\left( \tau  \right) \cos\left( \omega \tau  \right) \, d \tau  
+\]
+which demonstrates that \(S \!\left( \omega  \right) \) is real and symmetric.
+
+\vspace{12pt}
+
+% QUESTION 7
+\qs{12.7}{Compute the power spectrum, integral time scale, and Taylor time scale when \(R_{11} \!\left( \tau  \right) = \overline{u^{2}_{1}} \exp\left( - \alpha \tau^{2} \right) \cos\left( \omega _{0} \tau  \right)\), assuming that \(\alpha \) and \(\omega_{0}\) are real positive constants.}
+
+\textbf{Power Spectrum:}
+
+\begin{alignat*}{2}
+	S \!\left( \omega  \right)  & = \frac{1}{2 \pi } \int^{+\infty}_{-\infty} \!\left[ \overline{u^{2}_{1}} \exp\left( -\alpha \tau^{2} \right) \cos\left( \omega_{0}\tau  \right) \right] \exp\left( -i \omega_{0} \tau  \right) \, d \tau   \\
+	 & = \frac{1}{2 \pi } \int^{+\infty}_{-\infty} \overline{u^{2}_{1}} \exp\left( -\alpha \tau^{2} - i \omega_{0} \tau  \right) \cos\left( \omega_{0}\tau  \right) \, d \tau   \\ 
+\end{alignat*}
+
+Now, invoking the identity
+\[
+	\cos\left( \omega_{0}\tau  \right) = \frac{1}{2} \!\left( \exp\left( i \omega_{0}\tau  \right) + \exp\left( -i \omega_{0} \tau  \right) \right) 
+\]
+we can write
+
+\begin{alignat*}{2}
+	 & = \frac{1}{4 \pi } \int^{+\infty}_{-\infty} \overline{u^{2}_{1}} \exp\left( -\alpha \tau^{2} - i \omega_{0} \tau  \right) \!\left( \exp\left( i \omega_{0}\tau  \right) + \exp\left( -i \omega_{0}\tau  \right) \right)  \, d \tau  \\
+	 & = \frac{\overline{u^{2}_{1}}}{4 \pi } \!\left[ \int^{+\infty}_{-\infty} \exp\left( -\alpha \tau^{2} \right) \, d \tau + \int^{+\infty}_{-\infty} \exp\left( -\alpha \tau^{2} - 2i \omega_{0}\tau  \right) \, d \tau \right]  \\ 
+	 & = \frac{\overline{u^{2}_{1}}}{4 \pi } \!\left[ \sqrt{\frac{\pi }{\alpha }} + \sqrt{\frac{\pi }{\alpha }} \exp\left( -\frac{4 \omega^{2}_{0}}{4 \alpha } \right)  \right] \\
+	 & = \boxed{ \frac{\overline{u^{2}_{1}}}{4 \pi } \sqrt{\frac{\pi }{\alpha }} \!\left[ 1 + \exp\left( -\frac{\omega^{2}_{0}}{\alpha} \right) \right] } 
+\end{alignat*}
+Observe that, consistent with the result of question 12.6, as \(R_{11}\!\left( \tau  \right) \) is real and symmetric, \(S \!\left( \omega  \right) \) is real and symmetric.
+
+\vspace{12pt}
+
+\textbf{Integral Time Scale}
+
+\begin{alignat*}{2}
+	\Lambda_{t} & = \frac{1}{R_{11} \!\left( 0 \right) } \int^{\infty}_{0} R_{11}\!\left( \tau  \right)  \, d \tau   \\
+	 & = \frac{1}{R_{11} \!\left( 0 \right) } \int^{\infty}_{0} \overline{u^{2}_{1}}\exp\left( -\alpha \tau^{2} \right) \cos\left( \omega_{0}\tau  \right) \, d \tau  \\ 
+	 & = \frac{1}{2 R_{11}\!\left( 0 \right) } \int^{+\infty}_{-\infty} \overline{u^{2}_{1}}\exp\left( -\alpha \tau^{2} \right)\cos\left( \omega_{0}\tau  \right) \, d \tau \\ 
+	 & = \frac{\overline{u^{2}_{1}}}{4 R_{11}\!\left( 0 \right) } \!\left[ \int^{+\infty}_{-\infty} \exp\left( -\alpha \tau^{2} + i \omega_{0} \tau  \right)  \, d \tau + \int^{+\infty}_{-\infty} \exp\left( -\alpha \tau^{2} - i \omega_{0} \tau  \right) \, d \tau \right] \\
+	 & = \frac{\overline{u^{2}_{1}}}{2 R_{11}\!\left( 0 \right) } \sqrt{\frac{\pi }{\alpha }} \exp\left( -\frac{\omega^{2}_{0}}{4 \alpha } \right) \\
+\end{alignat*}
+
+where at the third equality, we rely on the symmetry of the integrand. Now, observe that
+\[
+	R_{11} \!\left( 0 \right) = \overline{u^{2}_{1}}
+\]
+and so we can conclude
+\[
+	\boxed{ \Lambda_{t} = \frac{1}{2} \sqrt{\frac{\pi }{\alpha }} \exp\left( -\frac{\omega^{2}_{0}}{4 \alpha } \right) }
+\]
+
+\textbf{Taylor Time Scale}
+
+Begin with the definition \(r_{11} \!\left( \tau  \right) = R_{11}\!\left( \tau  \right) / R_{11}\!\left( 0 \right) \). Then
+\[
+	r_{11} \!\left( \tau  \right) = \exp\left( -\alpha \tau^{2} \right) \cos\left( \omega_{0} \tau  \right)
+\]
+Breaking \(r_{11}\!\left( \tau  \right) \) into its terms and taking the Taylor series:
+\begin{alignat*}{2}
+	\exp\left( -\alpha \tau^{2} \right) & \approx 1 - \alpha \tau^{2} \\
+	\cos\left( \omega_{0}\tau  \right) & \approx 1 - \frac{\omega^{2}_{0} \tau^{2}}{2}
+\end{alignat*}
+Keeping the product to two terms, we find
+\[
+	r_{11} \!\left( \tau  \right) \approx 1 - \!\left( \frac{\omega^{2}_{0}}{2} + \alpha  \right) \tau^{2} 
+\]
+which gives us second derivative
+\[
+	\frac{d^{2} r_{11} }{d \tau^{2}} \!\left( \tau \right)  \approx - \!\left( \omega^{2}_{0} + 2 \alpha  \right) 
+\]
+and lastly, the Taylor time scale
+\[
+	\boxed{\lambda_{t} = \!\left( \frac{2}{\omega^{2}_{0} + 2 \alpha } \right)^{1/2}}
+\]
+% QUESTION 8
+\qs{12.8}{Two formulae for the energy spectrum \(S_{e}\!\left( \omega  \right) \) of the stationary zero-mean signal \(u \!\left( t \right) \) are:
+\[
+	S_{e}\!\left( \omega  \right) = \frac{1}{2 \pi } \int^{+\infty}_{-\infty} R_{11}\!\left( \tau  \right) \exp\left( -i \omega t \right) \, d \tau
+\]
+\[
+	\text{and} 
+\]
+\[
+\quad S_{e}\!\left( \omega  \right) = \lim\limits_{T \to \infty} \frac{1}{2 \pi T} \!\left| \int^{+T/2}_{-T/2} u \!\left( t \right) \exp\left( -i \omega t \right) \, dt  \right|  
+\]
+Prove that these two are identical \textit{without} requiring the existence of the Fourier transform of \(u \!\left( t \right) \).}
+
+\end{document}
